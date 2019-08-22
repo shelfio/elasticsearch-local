@@ -9,6 +9,7 @@ version: 2.1
 jobs:
   build:
     executor: node10
+    resource_class: large
     steps:
       - checkout
       - restore_cache:
@@ -21,6 +22,7 @@ jobs:
           paths:
             - node_modules
             - yarn.lock
+            - ./node_modules/.cache/@shelf/elasticsearch-local
           key: v1-dependencies-{{ checksum "package.json" }}
 
       - run: yarn lint
