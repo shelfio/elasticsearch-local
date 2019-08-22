@@ -25,6 +25,6 @@ jobs:
             - ./node_modules/.cache/@shelf/elasticsearch-local
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - run: yarn lint
+      - run: yarn lint:ci
       - run: yarn type-check
       - run: yarn test
