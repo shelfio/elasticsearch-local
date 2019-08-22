@@ -38,8 +38,6 @@ export async function start(options: StartESOptions): Promise<void> {
   const esArchiveFilepath = `${FILEPATH_PREFIX}/elasticsearch-${esVersion}${filenameSuffix}.tar.gz`;
   const esDownloadURL = `${esDownLoadURLPrefix}/elasticsearch-${esVersion}${filenameSuffix}.tar.gz`;
   const esBinaryFilepath = `${FILEPATH_PREFIX}/elasticsearch-${esVersion}/bin/elasticsearch`;
-  const esChecksumFilepath = `${FILEPATH_PREFIX}/elasticsearch-${esVersion}${filenameSuffix}.tar.gz.sha512`;
-  const esChecksumDownloadURL = `${esDownLoadURLPrefix}/elasticsearch-${esVersion}${filenameSuffix}.tar.gz.sha512`;
 
   if (!esVersion) {
     throw new Error('Please provide ElasticSearch version to start it locally');
@@ -50,16 +48,6 @@ export async function start(options: StartESOptions): Promise<void> {
     debug('Downloaded ES');
   } else {
     debug('ES already downloaded');
-  }
-
-  if (!(await isExistingFile(esChecksumFilepath))) {
-    await execSync(`wget -P ${FILEPATH_PREFIX} ${esChecksumDownloadURL}`);
-    debug('Downloaded checksum');
-
-    await execSync(`shasum -a 512 -c ${esChecksumFilepath}`);
-    debug('Checksum matched');
-  } else {
-    debug('Checksum already downloaded');
   }
 
   if (!(await isExistingFile(esBinaryFilepath))) {
