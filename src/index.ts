@@ -36,7 +36,6 @@ export async function start(options: StartESOptions): Promise<void> {
   const after7VersionSuffix = '-linux-x86_64';
   const filenameSuffix = isAfter7Version ? after7VersionSuffix : '';
   const esDownLoadURLPrefix = `https://artifacts.elastic.co/downloads/elasticsearch`;
-  const esArchiveFilepath = `${FILEPATH_PREFIX}/elasticsearch-${esVersion}${filenameSuffix}.tar.gz`;
   const esDownloadURL = `${esDownLoadURLPrefix}/elasticsearch-${esVersion}${filenameSuffix}.tar.gz`;
   const esBinaryFilepath = `${FILEPATH_PREFIX}/elasticsearch-${esVersion}/bin/elasticsearch`;
 
@@ -49,13 +48,6 @@ export async function start(options: StartESOptions): Promise<void> {
     debug('Downloaded ES');
   } else {
     debug('ES already downloaded');
-  }
-
-  if (!(await isExistingFile(esBinaryFilepath))) {
-    await execSync(`tar -xzf ${esArchiveFilepath} -C ${FILEPATH_PREFIX}`);
-    debug('Unarchived ES');
-  } else {
-    debug('ES already unarchived');
   }
 
   debug('Starting ES');
