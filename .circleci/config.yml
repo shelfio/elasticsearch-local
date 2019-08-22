@@ -8,11 +8,7 @@ version: 2.1
 
 jobs:
   build:
-    docker:
-      - image: node:10-browsers
-
-    working_directory: ~/repo
-
+    executor: node10
     steps:
       - checkout
       - restore_cache:
