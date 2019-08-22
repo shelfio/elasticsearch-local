@@ -1,6 +1,7 @@
 import getDebug from 'debug';
 import {execSync} from 'child_process';
 import {promisify} from 'util';
+import download from 'download-tarball';
 import {access, constants} from 'fs';
 import cwd from 'cwd';
 
@@ -43,8 +44,8 @@ export async function start(options: StartESOptions): Promise<void> {
     throw new Error('Please provide ElasticSearch version to start it locally');
   }
 
-  if (!(await isExistingFile(esArchiveFilepath))) {
-    await execSync(`wget -P ${FILEPATH_PREFIX} ${esDownloadURL}`);
+  if (!(await isExistingFile(esBinaryFilepath))) {
+    await download({url: esDownloadURL, dir: FILEPATH_PREFIX});
     debug('Downloaded ES');
   } else {
     debug('ES already downloaded');

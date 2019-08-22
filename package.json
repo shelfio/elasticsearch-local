@@ -53,7 +53,8 @@
   },
   "dependencies": {
     "cwd": "0.10.0",
-    "debug": "4.1.1"
+    "debug": "4.1.1",
+    "download-tarball": "2.0.0"
   },
   "devDependencies": {
     "@babel/cli": "7.5.5",
