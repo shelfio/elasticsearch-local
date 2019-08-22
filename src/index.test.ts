@@ -2,6 +2,8 @@ import {execSync} from 'child_process';
 import {start, stop} from '.';
 
 it('should start ElasticSearch v7.3.0 locally', async () => {
+  jest.setTimeout(10000);
+
   await start({esVersion: '7.3.0', port: 9000});
 
   const response = await execSync('curl -s -X GET "localhost:9000/?pretty"');
