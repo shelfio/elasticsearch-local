@@ -23,6 +23,8 @@ it('should start ElasticSearch v7.3.0 locally', async () => {
     },
     tagline: 'You Know, for Search'
   });
+
+  await stop();
 });
 
 it('should start ElasticSearch v6.8.2 locally', async () => {
@@ -47,6 +49,8 @@ it('should start ElasticSearch v6.8.2 locally', async () => {
     },
     tagline: 'You Know, for Search'
   });
+
+  await stop();
 });
 
 it('should start ElasticSearch v5.6.16 locally', async () => {
@@ -67,8 +71,6 @@ it('should start ElasticSearch v5.6.16 locally', async () => {
     },
     tagline: 'You Know, for Search'
   });
-});
 
-afterEach(async () => {
   await stop();
 });
