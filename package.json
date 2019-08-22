@@ -1,0 +1,73 @@
+{
+  "name": "@shelf/elasticsearch-local",
+  "version": "0.1.0",
+  "description": "Run any version of ElasticSearch locally",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "rm -rf lib/ && babel src --out-dir lib --ignore '**/*.test.ts' --extensions '.ts'",
+    "lint": "eslint . --fix",
+    "lint:ci": "eslint .",
+    "test": "jest src --runInBand",
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "npm run type-check -- --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shelfio/elasticsearch-local.git"
+  },
+  "keywords": [
+    "elasticsearch",
+    "elasticsearch local",
+    "local",
+    "es",
+    "es local",
+    "elastic",
+    "elastic local"
+  ],
+  "author": "Vitalii Sikora",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shelfio/elasticsearch-local/issues"
+  },
+  "homepage": "https://github.com/shelfio/elasticsearch-local#readme",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{html,json,md,yml}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "dependencies": {
+    "cwd": "0.10.0",
+    "debug": "4.1.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.5.5",
+    "@babel/core": "7.5.5",
+    "@babel/preset-env": "7.5.5",
+    "@babel/preset-typescript": "7.3.3",
+    "@shelf/eslint-config": "0.3.13",
+    "@types/jest": "24.0.18",
+    "babel-jest": "24.9.0",
+    "eslint": "6.2.1",
+    "husky": "3.0.4",
+    "jest": "24.9.0",
+    "lint-staged": "9.2.3",
+    "prettier": "1.18.2",
+    "typescript": "3.5.3"
+  }
+}
