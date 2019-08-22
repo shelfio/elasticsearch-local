@@ -1,6 +1,8 @@
 import {execSync} from 'child_process';
 import {start, stop} from '.';
 
+jest.setTimeout(20000);
+
 it('should start ElasticSearch v7.3.0 locally', async () => {
   await start({esVersion: '7.3.0', port: 9000});
 
