@@ -1,6 +1,7 @@
 import getDebug from 'debug';
 import {execSync} from 'child_process';
 import {promisify} from 'util';
+import download from 'download-tarball';
 import {access, constants} from 'fs';
 import cwd from 'cwd';
 
@@ -35,38 +36,18 @@ export async function start(options: StartESOptions): Promise<void> {
   const after7VersionSuffix = '-linux-x86_64';
   const filenameSuffix = isAfter7Version ? after7VersionSuffix : '';
   const esDownLoadURLPrefix = `https://artifacts.elastic.co/downloads/elasticsearch`;
-  const esArchiveFilepath = `${FILEPATH_PREFIX}/elasticsearch-${esVersion}${filenameSuffix}.tar.gz`;
   const esDownloadURL = `${esDownLoadURLPrefix}/elasticsearch-${esVersion}${filenameSuffix}.tar.gz`;
   const esBinaryFilepath = `${FILEPATH_PREFIX}/elasticsearch-${esVersion}/bin/elasticsearch`;
-  const esChecksumFilepath = `${FILEPATH_PREFIX}/elasticsearch-${esVersion}${filenameSuffix}.tar.gz.sha512`;
-  const esChecksumDownloadURL = `${esDownLoadURLPrefix}/elasticsearch-${esVersion}${filenameSuffix}.tar.gz.sha512`;
 
   if (!esVersion) {
     throw new Error('Please provide ElasticSearch version to start it locally');
   }
 
-  if (!(await isExistingFile(esArchiveFilepath))) {
-    await execSync(`wget -P ${FILEPATH_PREFIX} ${esDownloadURL}`);
+  if (!(await isExistingFile(esBinaryFilepath))) {
+    await download({url: esDownloadURL, dir: FILEPATH_PREFIX});
     debug('Downloaded ES');
   } else {
     debug('ES already downloaded');
-  }
-
-  if (!(await isExistingFile(esChecksumFilepath))) {
-    await execSync(`wget -P ${FILEPATH_PREFIX} ${esChecksumDownloadURL}`);
-    debug('Downloaded checksum');
-
-    await execSync(`shasum -a 512 -c ${esChecksumFilepath}`);
-    debug('Checksum matched');
-  } else {
-    debug('Checksum already downloaded');
-  }
-
-  if (!(await isExistingFile(esBinaryFilepath))) {
-    await execSync(`tar -xzf ${esArchiveFilepath} -C ${FILEPATH_PREFIX}`);
-    debug('Unarchived ES');
-  } else {
-    debug('ES already unarchived');
   }
 
   debug('Starting ES');
