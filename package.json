@@ -66,11 +66,11 @@
     "@types/debug": "4.1.5",
     "@types/jest": "24.0.18",
     "babel-jest": "24.9.0",
-    "eslint": "6.2.2",
+    "eslint": "6.3.0",
     "husky": "3.0.4",
     "jest": "24.9.0",
     "lint-staged": "9.2.5",
     "prettier": "1.18.2",
-    "typescript": "3.5.3"
+    "typescript": "3.6.2"
   }
 }
