@@ -26,6 +26,7 @@
     "build": "rm -rf lib/ && babel src --out-dir lib --ignore '**/*.test.ts' --extensions '.ts'",
     "lint": "eslint . --fix --ext .js,.json,.ts --quiet",
     "lint:ci": "eslint . --ext .js,.json,.ts --quiet",
+    "prepack": "npm run build",
     "test": "jest src --runInBand",
     "type-check": "tsc --noEmit",
     "type-check:watch": "npm run type-check -- --watch"
