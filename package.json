@@ -2,34 +2,34 @@
   "name": "@shelf/elasticsearch-local",
   "version": "0.1.0",
   "description": "Run any version of ElasticSearch locally",
-  "main": "lib/index.js",
-  "scripts": {
-    "build": "rm -rf lib/ && babel src --out-dir lib --ignore '**/*.test.ts' --extensions '.ts'",
-    "lint": "eslint . --fix",
-    "lint:ci": "eslint .",
-    "test": "jest src --runInBand",
-    "type-check": "tsc --noEmit",
-    "type-check:watch": "npm run type-check -- --watch"
+  "keywords": [
+    "elastic",
+    "elastic local",
+    "elasticsearch",
+    "elasticsearch local",
+    "es",
+    "es local",
+    "local"
+  ],
+  "homepage": "https://github.com/shelfio/elasticsearch-local#readme",
+  "bugs": {
+    "url": "https://github.com/shelfio/elasticsearch-local/issues"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shelfio/elasticsearch-local.git"
   },
-  "keywords": [
-    "elasticsearch",
-    "elasticsearch local",
-    "local",
-    "es",
-    "es local",
-    "elastic",
-    "elastic local"
-  ],
-  "author": "Vitalii Sikora",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/shelfio/elasticsearch-local/issues"
+  "author": "Vitalii Sikora",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "rm -rf lib/ && babel src --out-dir lib --ignore '**/*.test.ts' --extensions '.ts'",
+    "lint": "eslint . --fix --ext .js,.json,.ts --quiet",
+    "lint:ci": "eslint . --ext .js,.json,.ts --quiet",
+    "test": "jest src --runInBand",
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "npm run type-check -- --watch"
   },
-  "homepage": "https://github.com/shelfio/elasticsearch-local#readme",
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
@@ -44,12 +44,6 @@
       "prettier --write",
       "git add"
     ]
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "engines": {
-    "node": ">=10"
   },
   "dependencies": {
     "cwd": "0.10.0",
@@ -72,5 +66,11 @@
     "lint-staged": "9.2.5",
     "prettier": "1.18.2",
     "typescript": "3.6.2"
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
