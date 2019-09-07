@@ -1,6 +1,6 @@
 {
   "name": "@shelf/elasticsearch-local",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Run any version of ElasticSearch locally",
   "keywords": [
     "elastic",
