@@ -21,9 +21,14 @@
   },
   "license": "MIT",
   "author": "Vitalii Sikora",
+  "files": [
+    "lib"
+  ],
   "main": "lib/index.js",
+  "types": "./lib/index.d.ts",
   "scripts": {
-    "build": "rm -rf lib/ && babel src --out-dir lib --ignore '**/*.test.ts' --extensions '.ts'",
+    "build": "rm -rf lib/ && yarn build:types && babel src --out-dir lib --ignore '**/*.test.ts,**/*.mock.ts' --extensions '.ts'",
+    "build:types": "tsc -p tsconfig.types.json",
     "lint": "eslint . --fix --ext .js,.json,.ts --quiet",
     "lint:ci": "eslint . --ext .js,.json,.ts --quiet",
     "prepack": "npm run build",
@@ -37,11 +42,11 @@
     }
   },
   "lint-staged": {
-    "*.ts": [
+    "*.ts,*.json": [
       "eslint --fix",
       "git add"
     ],
-    "*.{html,json,md,yml}": [
+    "*.{html,md,yml}": [
       "prettier --write",
       "git add"
     ]
