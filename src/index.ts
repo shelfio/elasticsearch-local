@@ -58,13 +58,19 @@ export async function start(options: StartESOptions): Promise<void> {
   debug('ES is running');
 
   await Promise.all(
-    indexes.map(({name, body}) =>
-      execSync(
+    indexes.map(async ({name, body}) => {
+      const result = execSync(
         `curl -X PUT "${esURL}${name}" -H 'Content-Type: application/json' -s -d '${JSON.stringify(
           body
         )}'`
-      )
-    )
+      );
+
+      const error = getESError(result);
+
+      if (error) {
+        throw new Error(`Failed to create index: ${error.reason}`);
+      }
+    })
   );
   debug(`Created ${indexes.length} indexes`);
 
@@ -79,7 +85,14 @@ export async function stop(): Promise<void> {
   const esVersion = process.env.ES_VERSION;
 
   if (indexes) {
-    await execSync(`curl -XDELETE ${esURL}${indexes} -s`);
+    const result = await execSync(`curl -XDELETE ${esURL}${indexes} -s`);
+
+    const error = getESError(result);
+
+    if (error) {
+      throw new Error(`Failed to remove index: ${error.reason}`);
+    }
+
     debug('Removed all indexes');
   }
 
@@ -97,4 +110,12 @@ async function isExistingFile(filepath: string): Promise<boolean> {
   } catch (e) {
     return false;
   }
+}
+
+interface ESError {
+  reason: string;
+}
+
+function getESError(esResponse: Buffer): ESError | undefined {
+  return JSON.parse(esResponse.toString()).error;
 }
