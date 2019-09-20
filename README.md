@@ -20,7 +20,25 @@ await start({
   port: 9000, // optional
   clusterName: 'test', // optional
   nodeName: 'test', // optional
-  indexes: ['one', 'two'] // optional
+  indexes: [
+    {
+      name: 'your-index',
+      // create index with options - https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-create-index.html#indices-create-api-request-body
+      body: {
+        settings: {
+          number_of_shards: '1',
+          number_of_replicas: '1'
+        },
+        aliases: {
+          'some-acc-id': {}
+        },
+        mappings: {
+          "properties": {
+            "field1" : {"type" : "text"}
+        }
+      }
+    }
+  ] // optional
 });
 ```
 
