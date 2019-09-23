@@ -57,9 +57,9 @@
     "download-tarball": "2.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.6.0",
-    "@babel/core": "7.6.0",
-    "@babel/preset-env": "7.6.0",
+    "@babel/cli": "7.6.2",
+    "@babel/core": "7.6.2",
+    "@babel/preset-env": "7.6.2",
     "@babel/preset-typescript": "7.6.0",
     "@shelf/eslint-config": "0.7.0",
     "@types/cwd": "0.10.0",
