@@ -61,7 +61,7 @@
     "@babel/core": "7.6.4",
     "@babel/preset-env": "7.6.3",
     "@babel/preset-typescript": "7.6.0",
-    "@shelf/eslint-config": "0.8.2",
+    "@shelf/eslint-config": "0.13.0",
     "@types/cwd": "0.10.0",
     "@types/debug": "4.1.5",
     "@types/jest": "24.0.25",
