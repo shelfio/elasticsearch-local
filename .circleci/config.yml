@@ -71,7 +71,6 @@ workflows:
       - test_v7:
           requires:
             - build
-          steps:
 
       - test_v6:
           requires:
