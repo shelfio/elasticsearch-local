@@ -57,21 +57,21 @@
     "download-tarball": "2.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.6.0",
-    "@babel/core": "7.6.0",
-    "@babel/preset-env": "7.6.0",
-    "@babel/preset-typescript": "7.6.0",
-    "@shelf/eslint-config": "0.6.0",
+    "@babel/cli": "7.8.4",
+    "@babel/core": "7.8.4",
+    "@babel/preset-env": "7.8.4",
+    "@babel/preset-typescript": "7.8.3",
+    "@shelf/eslint-config": "0.14.2",
     "@types/cwd": "0.10.0",
     "@types/debug": "4.1.5",
-    "@types/jest": "24.0.18",
-    "babel-jest": "24.9.0",
-    "eslint": "6.3.0",
-    "husky": "3.0.5",
-    "jest": "24.9.0",
-    "lint-staged": "9.2.5",
-    "prettier": "1.18.2",
-    "typescript": "3.6.3"
+    "@types/jest": "25.1.4",
+    "babel-jest": "25.2.4",
+    "eslint": "6.8.0",
+    "husky": "4.2.3",
+    "jest": "25.2.4",
+    "lint-staged": "10.1.1",
+    "prettier": "1.19.1",
+    "typescript": "3.7.5"
   },
   "engines": {
     "node": ">=10"
