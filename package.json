@@ -42,12 +42,12 @@
     }
   },
   "lint-staged": {
-    "*.ts,*.json": [
-      "eslint --fix",
+    "*.{html,md,yml,graphql}": [
+      "prettier --write",
       "git add"
     ],
-    "*.{html,md,yml}": [
-      "prettier --write",
+    "*.{ts,js,json}": [
+      "eslint --fix",
       "git add"
     ]
   },
