@@ -67,7 +67,7 @@ export async function start(options: StartESOptions): Promise<void> {
     ); // disable ML feature as it not ships with bundled installer
   } else if (!disableML && versionAlreadyDownloaded) {
     execSync(
-      `[ "$(awk '/./{line=$0} END{print line}' ${ymlConfig})" == "xpack.ml.enabled: false" ] && ${getSedCommang()} ${ymlConfig}`
+      `[ "$(awk '/./{line=$0} END{print line}' ${ymlConfig})" == "xpack.ml.enabled: false" ] && ${getSedCommand()} ${ymlConfig}`
     );
   }
 
