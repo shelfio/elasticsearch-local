@@ -120,7 +120,7 @@ export async function stop(): Promise<void> {
     execSync(`pkill -F ${FILEPATH_PREFIX}/elasticsearch-${esVersion}/es-pid`);
   } catch (e) {
     debug(`Could not stop ES, killing all elasticsearch system wide`);
-    execSync(`pkill -F Elasticsearch`);
+    execSync(`pkill -f Elasticsearch`);
   }
   debug('ES has been stopped');
 }
