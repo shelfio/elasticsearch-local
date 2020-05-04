@@ -21,11 +21,11 @@
   },
   "license": "MIT",
   "author": "Vitalii Sikora",
+  "main": "lib/index.js",
+  "types": "./lib/index.d.ts",
   "files": [
     "lib"
   ],
-  "main": "lib/index.js",
-  "types": "./lib/index.d.ts",
   "scripts": {
     "build": "rm -rf lib/ && yarn build:types && babel src --out-dir lib --ignore '**/*.test.ts,**/*.mock.ts' --extensions '.ts'",
     "build:types": "tsc -p tsconfig.types.json",
@@ -52,19 +52,21 @@
     ]
   },
   "dependencies": {
+    "@babel/compat-data": "7.8.0",
     "cwd": "0.10.0",
     "debug": "4.1.1",
     "download-tarball": "2.0.0"
   },
   "devDependencies": {
     "@babel/cli": "7.8.4",
-    "@babel/core": "7.8.4",
-    "@babel/preset-env": "7.8.4",
-    "@babel/preset-typescript": "7.8.3",
+    "@babel/core": "7.9.6",
+    "@babel/preset-env": "7.9.6",
+    "@babel/preset-typescript": "7.9.0",
     "@shelf/eslint-config": "0.14.2",
     "@types/cwd": "0.10.0",
     "@types/debug": "4.1.5",
-    "@types/jest": "25.1.4",
+    "@types/jest": "25.2.1",
+    "@types/node": "12",
     "babel-jest": "25.2.4",
     "eslint": "6.8.0",
     "husky": "4.2.5",
