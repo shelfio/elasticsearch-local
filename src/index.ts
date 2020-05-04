@@ -62,7 +62,6 @@ export async function start(options: StartESOptions): Promise<void> {
   }
 
   if (disableML) {
-    // old version does not recognize ml settings disable
     execSync(
       `[ "$(awk '/./{line=$0} END{print line}' ${ymlConfig})" == "xpack.ml.enabled: false" ] || echo 'xpack.ml.enabled: false' >> ${ymlConfig}`
     ); // disable ML feature as it not ships with bundled installer
@@ -88,7 +87,7 @@ export async function start(options: StartESOptions): Promise<void> {
       );
 
       const error = getESError(result);
-      console.error(error);
+
       if (error) {
         throw new Error(`Failed to create index: ${error.reason}`);
       }
