@@ -52,7 +52,6 @@
     ]
   },
   "dependencies": {
-    "@babel/compat-data": "7.8.0",
     "cwd": "0.10.0",
     "debug": "4.1.1",
     "download-tarball": "2.0.0"

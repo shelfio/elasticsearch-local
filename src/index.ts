@@ -61,8 +61,15 @@ export async function start(options: StartESOptions): Promise<void> {
     debug('ES already downloaded');
   }
 
-  if (disableML && !versionAlreadyDownloaded) {
-    execSync(`echo 'xpack.ml.enabled: false' >> ${ymlConfig}`); // disable ML feature as it not ships with bundled installer
+  if (disableML) {
+    // old version does not recognize ml settings disable
+    execSync(
+      `[ "$(awk '/./{line=$0} END{print line}' ${ymlConfig})" == "xpack.ml.enabled: false" ] || echo 'xpack.ml.enabled: false' >> ${ymlConfig}`
+    ); // disable ML feature as it not ships with bundled installer
+  } else if (!disableML && versionAlreadyDownloaded) {
+    execSync(
+      `[ "$(awk '/./{line=$0} END{print line}' ${ymlConfig})" == "xpack.ml.enabled: false" ] && ${getSedCommang()} ${ymlConfig}`
+    );
   }
 
   debug('Starting ES');
@@ -81,7 +88,7 @@ export async function start(options: StartESOptions): Promise<void> {
       );
 
       const error = getESError(result);
-
+      console.error(error);
       if (error) {
         throw new Error(`Failed to create index: ${error.reason}`);
       }
@@ -110,8 +117,12 @@ export async function stop(): Promise<void> {
 
     debug('Removed all indexes');
   }
-
-  await execSync(`pkill -F ${FILEPATH_PREFIX}/elasticsearch-${esVersion}/es-pid`);
+  try {
+    execSync(`pkill -F ${FILEPATH_PREFIX}/elasticsearch-${esVersion}/es-pid`);
+  } catch (e) {
+    debug(`Could not stop ES, killing all elasticsearch system wide`);
+    execSync(`pkill -F Elasticsearch`);
+  }
   debug('ES has been stopped');
 }
 
@@ -161,4 +172,12 @@ function getVersionSuffix() {
       return '-linux-x86_64';
     }
   }
+}
+
+function getSedCommang() {
+  if (platform() === 'darwin') {
+    return `sed -i '' -e '$ d'`;
+  }
+
+  return `sed -i '$ d'`;
 }
