@@ -173,7 +173,7 @@ function getVersionSuffix() {
   }
 }
 
-function getSedCommang() {
+function getSedCommand() {
   if (platform() === 'darwin') {
     return `sed -i '' -e '$ d'`;
   }
