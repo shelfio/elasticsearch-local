@@ -1,6 +1,7 @@
 import getDebug from 'debug';
 import {execSync} from 'child_process';
 import {promisify} from 'util';
+import {platform} from 'os';
 import download from 'download-tarball';
 import {access, constants} from 'fs';
 import cwd from 'cwd';
@@ -15,6 +16,7 @@ interface StartESOptions {
   nodeName?: string;
   port?: number;
   indexes?: ESIndex[];
+  disableML?: boolean;
 }
 
 interface ESIndex {
@@ -29,25 +31,44 @@ export async function start(options: StartESOptions): Promise<void> {
     clusterName = 'es-local',
     nodeName = 'es-local',
     port = 9200,
-    indexes = []
+    indexes = [],
+    disableML = true
   } = options;
+
   const esURL = `http://localhost:${port}/`;
-  const isAfter7Version = esVersion[0] === '7';
-  const after7VersionSuffix = '-linux-x86_64';
-  const filenameSuffix = isAfter7Version ? after7VersionSuffix : '';
+  const isAfter7Version = getVersionFromString(esVersion) >= 7;
+
+  if (isAfter7Version) {
+    process.env.JAVA_HOME = process.env.JAVA_HOME || '/usr'; // set up random path if correct not exist in file system to run bundled java
+  }
+
+  const filenameSuffix = isAfter7Version ? getVersionSuffix() : '';
   const esDownLoadURLPrefix = `https://artifacts.elastic.co/downloads/elasticsearch`;
   const esDownloadURL = `${esDownLoadURLPrefix}/elasticsearch-${esVersion}${filenameSuffix}.tar.gz`;
   const esBinaryFilepath = `${FILEPATH_PREFIX}/elasticsearch-${esVersion}/bin/elasticsearch`;
+  const ymlConfig = `${FILEPATH_PREFIX}/elasticsearch-${esVersion}/config/elasticsearch.yml`;
 
   if (!esVersion) {
     throw new Error('Please provide ElasticSearch version to start it locally');
   }
 
-  if (!(await isExistingFile(esBinaryFilepath))) {
+  const versionAlreadyDownloaded = await isExistingFile(esBinaryFilepath);
+
+  if (!versionAlreadyDownloaded) {
     await download({url: esDownloadURL, dir: FILEPATH_PREFIX});
     debug('Downloaded ES');
   } else {
     debug('ES already downloaded');
+  }
+
+  if (disableML) {
+    execSync(
+      `[ "$(awk '/./{line=$0} END{print line}' ${ymlConfig})" == "xpack.ml.enabled: false" ] || echo 'xpack.ml.enabled: false' >> ${ymlConfig}`
+    ); // disable ML feature as it not ships with bundled installer
+  } else if (!disableML && versionAlreadyDownloaded) {
+    execSync(
+      `[ "$(awk '/./{line=$0} END{print line}' ${ymlConfig})" == "xpack.ml.enabled: false" ] && ${getSedCommand()} ${ymlConfig}`
+    );
   }
 
   debug('Starting ES');
@@ -95,8 +116,12 @@ export async function stop(): Promise<void> {
 
     debug('Removed all indexes');
   }
-
-  await execSync(`pkill -F ${FILEPATH_PREFIX}/elasticsearch-${esVersion}/es-pid`);
+  try {
+    execSync(`pkill -F ${FILEPATH_PREFIX}/elasticsearch-${esVersion}/es-pid`);
+  } catch (e) {
+    debug(`Could not stop ES, killing all elasticsearch system wide`);
+    execSync(`pkill -f Elasticsearch`);
+  }
   debug('ES has been stopped');
 }
 
@@ -118,4 +143,40 @@ interface ESError {
 
 function getESError(esResponse: Buffer): ESError | undefined {
   return JSON.parse(esResponse.toString()).error;
+}
+
+function getVersionFromString(version: string): number {
+  if (typeof version !== 'string') {
+    throw new Error('Version should be type of a string');
+  }
+
+  let majorVersion = ``;
+  for (const v of version) {
+    if (isNaN(Number(v))) {
+      return Number(majorVersion);
+    }
+    majorVersion += v;
+  }
+}
+
+function getVersionSuffix() {
+  switch (platform()) {
+    case 'darwin': {
+      return '-darwin-x86_64';
+    }
+    case 'win32': {
+      throw new Error('Unsupported OS, try run on OS X or Linux');
+    }
+    default: {
+      return '-linux-x86_64';
+    }
+  }
+}
+
+function getSedCommand() {
+  if (platform() === 'darwin') {
+    return `sed -i '' -e '$ d'`;
+  }
+
+  return `sed -i '$ d'`;
 }
