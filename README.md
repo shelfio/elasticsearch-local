@@ -50,6 +50,15 @@ import {stop} from '@shelf/elasticsearch-local';
 await stop();
 ```
 
+## Publish
+
+```sh
+$ git checkout master
+$ yarn version
+$ yarn publish
+$ git push origin master
+```
+
 ## License
 
 MIT © [Shelf](https://shelf.io)
