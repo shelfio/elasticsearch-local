@@ -72,7 +72,7 @@
     "jest": "25.2.4",
     "lint-staged": "10.2.2",
     "prettier": "1.19.1",
-    "typescript": "3.8.3"
+    "typescript": "3.9.2"
   },
   "engines": {
     "node": ">=10"
