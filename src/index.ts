@@ -89,7 +89,11 @@ export async function start(options: StartESOptions): Promise<void> {
       const error = getESError(result);
 
       if (error) {
-        throw new Error(`Failed to create index: ${error.reason}`);
+        if (error.type === 'resource_already_exists_exception') {
+          debug(`Index ${name} already exists.`);
+        } else {
+          throw new Error(`Failed to create index: ${error.reason}`);
+        }
       }
     })
   );
@@ -139,6 +143,7 @@ async function isExistingFile(filepath: string): Promise<boolean> {
 
 interface ESError {
   reason: string;
+  type: string;
 }
 
 function getESError(esResponse: Buffer): ESError | undefined {
