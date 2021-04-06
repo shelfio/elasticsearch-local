@@ -1,6 +1,6 @@
 {
   "name": "@shelf/elasticsearch-local",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Run 6+ version of ElasticSearch locally",
   "keywords": [
     "elastic",
@@ -21,11 +21,11 @@
   },
   "license": "MIT",
   "author": "Vitalii Sikora",
-  "main": "lib/index.js",
-  "types": "./lib/index.d.ts",
   "files": [
     "lib"
   ],
+  "main": "lib/index.js",
+  "types": "./lib/index.d.ts",
   "scripts": {
     "build": "rm -rf lib/ && yarn build:types && babel src --out-dir lib --ignore '**/*.test.ts,**/*.mock.ts' --extensions '.ts'",
     "build:types": "tsc -p tsconfig.types.json",
