@@ -2,3 +2,4 @@ coverage/
 lib/
 renovate.json
 tsconfig.json
+package.json
