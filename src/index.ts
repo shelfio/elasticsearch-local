@@ -2,9 +2,11 @@ import getDebug from 'debug';
 import {execSync} from 'child_process';
 import {promisify} from 'util';
 import {platform} from 'os';
+import execa from 'execa';
+import yaml from 'js-yaml';
 // @ts-ignore
 import download from 'download-tarball';
-import {access, constants} from 'fs';
+import {access, constants, readFileSync, writeFileSync} from 'fs';
 import cwd from 'cwd';
 
 const debug = getDebug('elasticsearch-local');
@@ -17,7 +19,6 @@ interface StartESOptions {
   nodeName?: string;
   port?: number;
   indexes?: ESIndex[];
-  disableML?: boolean;
 }
 
 interface ESIndex {
@@ -33,21 +34,20 @@ export async function start(options: StartESOptions): Promise<void> {
     nodeName = 'es-local',
     port = 9200,
     indexes = [],
-    disableML = true,
   } = options;
 
   const esURL = `http://localhost:${port}/`;
   const isAfter7Version = getVersionFromString(esVersion) >= 7;
 
   if (isAfter7Version) {
-    process.env.JAVA_HOME = process.env.JAVA_HOME || '/usr'; // set up random path if correct not exist in file system to run bundled java
+    process.env.ES_JAVA_HOME = process.env.JAVA_HOME || '/usr'; // set up random path if correct not exist in file system to run bundled java
   }
 
   const filenameSuffix = isAfter7Version ? getVersionSuffix() : '';
   const esDownLoadURLPrefix = `https://artifacts.elastic.co/downloads/elasticsearch`;
   const esDownloadURL = `${esDownLoadURLPrefix}/elasticsearch-${esVersion}${filenameSuffix}.tar.gz`;
   const esBinaryFilepath = `${FILEPATH_PREFIX}/elasticsearch-${esVersion}/bin/elasticsearch`;
-  const ymlConfig = `${FILEPATH_PREFIX}/elasticsearch-${esVersion}/config/elasticsearch.yml`;
+  const ymlConfigPath = `${FILEPATH_PREFIX}/elasticsearch-${esVersion}/config/elasticsearch.yml`;
 
   if (!esVersion) {
     throw new Error('Please provide ElasticSearch version to start it locally');
@@ -62,21 +62,49 @@ export async function start(options: StartESOptions): Promise<void> {
     debug('ES already downloaded');
   }
 
-  if (disableML) {
-    execSync(
-      `[ "$(awk '/./{line=$0} END{print line}' ${ymlConfig})" == "xpack.ml.enabled: false" ] || echo 'xpack.ml.enabled: false' >> ${ymlConfig}`
-    ); // disable ML feature as it not ships with bundled installer
-  } else if (!disableML && versionAlreadyDownloaded) {
-    execSync(
-      `[ "$(awk '/./{line=$0} END{print line}' ${ymlConfig})" == "xpack.ml.enabled: false" ] && ${getSedCommand()} ${ymlConfig}`
-    );
-  }
+  const parsedYaml = yaml.load(readFileSync(ymlConfigPath).toString()) as Record<string, unknown>;
 
-  debug('Starting ES');
-
-  await execSync(
-    `${esBinaryFilepath} -d -p ${FILEPATH_PREFIX}/elasticsearch-${esVersion}/es-pid -Ecluster.name=${clusterName} -Enode.name=${nodeName} -Ehttp.port=${port}`
+  writeFileSync(
+    ymlConfigPath,
+    yaml.dump({
+      ...parsedYaml,
+      xpack: {
+        ml: {
+          enabled: false,
+        },
+        monitoring: {
+          collection: {
+            enabled: false,
+          },
+        },
+        watcher: {
+          enabled: false,
+        },
+      },
+      discovery: {
+        type: 'single-node',
+      },
+    })
   );
+  debug('Starting ES', esBinaryFilepath);
+
+  const spawnedProcess = execa(
+    esBinaryFilepath,
+    [
+      `-d`,
+      `-p`,
+      `${FILEPATH_PREFIX}/elasticsearch-${esVersion}/es-pid`,
+      `-Ecluster.name=${clusterName}`,
+      `-Enode.name=${nodeName}`,
+      `-Ehttp.port=${port}`,
+    ],
+    {all: true}
+  );
+  spawnedProcess.all?.on('data', data => {
+    debug(data.toString());
+  });
+
+  await spawnedProcess;
   debug('ES is running');
 
   await Promise.all(
@@ -181,12 +209,4 @@ function getVersionSuffix() {
       return '-linux-x86_64';
     }
   }
-}
-
-function getSedCommand() {
-  if (platform() === 'darwin') {
-    return `sed -i '' -e '$ d'`;
-  }
-
-  return `sed -i '$ d'`;
 }
