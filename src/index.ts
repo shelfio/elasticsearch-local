@@ -62,30 +62,7 @@ export async function start(options: StartESOptions): Promise<void> {
     debug('ES already downloaded');
   }
 
-  const parsedYaml = yaml.load(readFileSync(ymlConfigPath).toString()) as Record<string, unknown>;
-
-  writeFileSync(
-    ymlConfigPath,
-    yaml.dump({
-      ...parsedYaml,
-      xpack: {
-        ml: {
-          enabled: false,
-        },
-        monitoring: {
-          collection: {
-            enabled: false,
-          },
-        },
-        watcher: {
-          enabled: false,
-        },
-      },
-      discovery: {
-        type: 'single-node',
-      },
-    })
-  );
+  upsertYAMLConfig(ymlConfigPath);
   debug('Starting ES', esBinaryFilepath);
 
   const spawnedProcess = execa(
@@ -209,4 +186,31 @@ function getVersionSuffix() {
       return '-linux-x86_64';
     }
   }
+}
+
+function upsertYAMLConfig(ymlConfigPath: string): void {
+  const parsedYaml = yaml.load(readFileSync(ymlConfigPath).toString()) as Record<string, unknown>;
+
+  writeFileSync(
+    ymlConfigPath,
+    yaml.dump({
+      ...parsedYaml,
+      xpack: {
+        ml: {
+          enabled: false,
+        },
+        monitoring: {
+          collection: {
+            enabled: false,
+          },
+        },
+        watcher: {
+          enabled: false,
+        },
+      },
+      discovery: {
+        type: 'single-node',
+      },
+    })
+  );
 }
