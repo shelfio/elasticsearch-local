@@ -86,6 +86,14 @@ export async function start(options: StartESOptions): Promise<void> {
   await spawnedProcess;
   debug('ES is running');
 
+  await createIndices(esURL, indexes);
+
+  process.env.ES_URL = esURL;
+  process.env.ES_VERSION = esVersion;
+  process.env.ES_INDEXES_NAMES = JSON.stringify(indexes.map(({name}) => name));
+}
+
+async function createIndices(esURL: string, indexes: {name: string; body: any}[]): Promise<void> {
   await Promise.all(
     indexes.map(async ({name, body}) => {
       const result = execSync(
@@ -106,10 +114,6 @@ export async function start(options: StartESOptions): Promise<void> {
     })
   );
   debug(`Created ${indexes.length} indexes`);
-
-  process.env.ES_URL = esURL;
-  process.env.ES_VERSION = esVersion;
-  process.env.ES_INDEXES_NAMES = JSON.stringify(indexes.map(({name}) => name));
 }
 
 export function stop(): void {
