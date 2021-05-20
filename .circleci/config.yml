@@ -1,14 +1,14 @@
 executors:
-  node10:
+  node14:
     docker:
-      - image: circleci/node:10-browsers
+      - image: circleci/node:14-browsers
     working_directory: ~/repo
 
 version: 2.1
 
 jobs:
   build:
-    executor: node10
+    executor: node14
     steps:
       - checkout
       - restore_cache:
@@ -32,7 +32,7 @@ jobs:
             - .
 
   test_v7:
-    executor: node10
+    executor: node14
     resource_class: large
     steps:
       - checkout
@@ -42,7 +42,7 @@ jobs:
       - run: yarn test -t=7.6.0
 
   test_v6:
-    executor: node10
+    executor: node14
     resource_class: large
     steps:
       - checkout
