@@ -2,6 +2,7 @@ import getDebug from 'debug';
 import {execSync} from 'child_process';
 import {promisify} from 'util';
 import {platform} from 'os';
+// @ts-ignore
 import download from 'download-tarball';
 import {access, constants} from 'fs';
 import cwd from 'cwd';
@@ -105,7 +106,7 @@ export async function start(options: StartESOptions): Promise<void> {
 }
 
 export async function stop(): Promise<void> {
-  const indexes = JSON.parse(process.env.ES_INDEXES_NAMES).join(',');
+  const indexes = JSON.parse(process.env.ES_INDEXES_NAMES!).join(',');
   const esURL = process.env.ES_URL;
   const esVersion = process.env.ES_VERSION;
 
@@ -156,12 +157,16 @@ function getVersionFromString(version: string): number {
   }
 
   let majorVersion = ``;
+
   for (const v of version) {
     if (isNaN(Number(v))) {
       return Number(majorVersion);
     }
+
     majorVersion += v;
   }
+
+  return 7;
 }
 
 function getVersionSuffix() {
