@@ -27,26 +27,29 @@
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "build": "rm -rf lib/ && yarn build:types && babel src --out-dir lib --ignore '**/*.test.ts,**/*.mock.ts' --extensions '.ts'",
-    "build:types": "tsc -p tsconfig.types.json",
-    "lint": "eslint . --fix --ext .js,.json,.ts --quiet",
-    "lint:ci": "eslint . --ext .js,.json,.ts --quiet",
-    "prepack": "npm run build",
+    "build": "rm -rf lib/ && yarn build:types && yarn build:code",
+    "build:code": "babel src --out-dir lib --ignore '**/*.test.ts' --extensions '.ts' && find ./lib -name '*.test.d.ts' -delete",
+    "build:types": "tsc --emitDeclarationOnly --declaration --isolatedModules false --declarationDir lib",
+    "coverage": "yarn test --coverage",
+    "lint": "eslint . --ext .js,.ts,.json --fix",
+    "lint:ci": "eslint . --ext .js,.ts,.json",
+    "prepack": "yarn build",
     "test": "jest src --runInBand",
     "type-check": "tsc --noEmit",
     "type-check:watch": "npm run type-check -- --watch"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "post-commit": "git update-index --again"
     }
   },
   "lint-staged": {
-    "*.{html,md,yml,graphql}": [
+    "*.{html,md,yml}": [
       "prettier --write",
       "git add"
     ],
-    "*.{ts,js,json}": [
+    "*.{js,ts,json}": [
       "eslint --fix",
       "git add"
     ]
@@ -54,27 +57,30 @@
   "babel": {
     "extends": "@shelf/babel-config/backend"
   },
+  "prettier": "@shelf/prettier-config",
   "dependencies": {
     "cwd": "0.10.0",
     "debug": "4.1.1",
     "download-tarball": "2.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.8.4",
-    "@babel/core": "7.9.6",
+    "@babel/cli": "7.14.3",
+    "@babel/core": "7.14.3",
     "@shelf/babel-config": "0.1.2",
-    "@shelf/eslint-config": "0.19.0",
+    "@shelf/eslint-config": "1.1.0",
+    "@shelf/prettier-config": "1.0.0",
+    "@shelf/tsconfig": "0.0.6",
     "@types/cwd": "0.10.0",
     "@types/debug": "4.1.5",
-    "@types/jest": "26.0.9",
+    "@types/jest": "26.0.23",
     "@types/node": "14",
-    "babel-jest": "26.2.2",
-    "eslint": "7.1.0",
+    "babel-jest": "26.6.3",
+    "eslint": "7.26.0",
     "husky": "4.2.5",
-    "jest": "26.2.2",
-    "lint-staged": "10.2.6",
-    "prettier": "2.0.5",
-    "typescript": "3.9.3"
+    "jest": "26.6.3",
+    "lint-staged": "11.0.0",
+    "prettier": "2.3.0",
+    "typescript": "4.2.4"
   },
   "engines": {
     "node": ">=14"
