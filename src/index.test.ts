@@ -27,30 +27,3 @@ it('should start ElasticSearch v7.6.0 locally', async () => {
 
   await stop();
 });
-
-it('should start ElasticSearch v6.8.2 locally', async () => {
-  await start({esVersion: '6.8.2', port: 9100});
-  jest.setTimeout(80000);
-
-  const response = await execSync('curl -s -X GET "localhost:9100/?pretty"');
-
-  expect(JSON.parse(response.toString())).toEqual({
-    name: 'es-local',
-    cluster_name: 'es-local',
-    cluster_uuid: expect.any(String),
-    version: {
-      number: '6.8.2',
-      build_flavor: 'default',
-      build_type: 'tar',
-      build_hash: expect.any(String),
-      build_date: expect.any(String),
-      build_snapshot: false,
-      lucene_version: '7.7.0',
-      minimum_wire_compatibility_version: '5.6.0',
-      minimum_index_compatibility_version: '5.0.0',
-    },
-    tagline: 'You Know, for Search',
-  });
-
-  await stop();
-});
