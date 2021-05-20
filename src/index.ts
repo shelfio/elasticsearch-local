@@ -27,6 +27,8 @@ interface ESIndex {
   body: Record<string, unknown>;
 }
 
+let spawnedProcess: execa.ExecaChildProcess;
+
 export async function start(options: StartESOptions): Promise<void> {
   const {
     esVersion,
@@ -65,7 +67,7 @@ export async function start(options: StartESOptions): Promise<void> {
   upsertYAMLConfig(ymlConfigPath);
   debug('Starting ES', esBinaryFilepath);
 
-  const spawnedProcess = execa(
+  spawnedProcess = execa(
     esBinaryFilepath,
     [
       `-d`,
@@ -110,13 +112,19 @@ export async function start(options: StartESOptions): Promise<void> {
   process.env.ES_INDEXES_NAMES = JSON.stringify(indexes.map(({name}) => name));
 }
 
-export async function stop(): Promise<void> {
+export function stop(): void {
+  cleanupIndices();
+  killProcess();
+
+  debug('ES has been stopped');
+}
+
+function cleanupIndices(): void {
   const indexes = JSON.parse(process.env.ES_INDEXES_NAMES!).join(',');
   const esURL = process.env.ES_URL;
-  const esVersion = process.env.ES_VERSION;
 
   if (indexes) {
-    const result = await execSync(`curl -XDELETE ${esURL}${indexes} -s`);
+    const result = execSync(`curl -XDELETE ${esURL}${indexes} -s`);
 
     const error = getESError(result);
 
@@ -126,13 +134,17 @@ export async function stop(): Promise<void> {
 
     debug('Removed all indexes');
   }
+}
+
+function killProcess(): void {
   try {
-    execSync(`pkill -F ${FILEPATH_PREFIX}/elasticsearch-${esVersion}/es-pid`);
+    spawnedProcess.kill('SIGTERM', {
+      forceKillAfterTimeout: 2000,
+    });
   } catch (e) {
     debug(`Could not stop ES, killing all elasticsearch system wide`);
     execSync(`pkill -f Elasticsearch`);
   }
-  debug('ES has been stopped');
 }
 
 async function isExistingFile(filepath: string): Promise<boolean> {
@@ -174,7 +186,7 @@ function getVersionFromString(version: string): number {
   return 7;
 }
 
-function getVersionSuffix() {
+function getVersionSuffix(): string {
   switch (platform()) {
     case 'darwin': {
       return '-darwin-x86_64';
