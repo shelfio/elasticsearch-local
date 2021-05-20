@@ -22,7 +22,7 @@ interface StartESOptions {
 interface ESIndex {
   name: string;
   // Body, which will be sent ot create index, see https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-create-index.html#indices-create-index
-  body: object;
+  body: Record<string, unknown>;
 }
 
 export async function start(options: StartESOptions): Promise<void> {
@@ -32,7 +32,7 @@ export async function start(options: StartESOptions): Promise<void> {
     nodeName = 'es-local',
     port = 9200,
     indexes = [],
-    disableML = true
+    disableML = true,
   } = options;
 
   const esURL = `http://localhost:${port}/`;
