@@ -4,6 +4,7 @@ import {promisify} from 'util';
 import {platform} from 'os';
 import execa from 'execa';
 import yaml from 'js-yaml';
+import waitForLocalhost from 'wait-for-localhost';
 // @ts-ignore
 import download from 'download-tarball';
 import {access, constants, readFileSync, writeFileSync} from 'fs';
@@ -83,7 +84,7 @@ export async function start(options: StartESOptions): Promise<void> {
     debug(data.toString());
   });
 
-  await spawnedProcess;
+  await waitForLocalhost({port});
   debug('ES is running');
 
   await createIndices(esURL, indexes);

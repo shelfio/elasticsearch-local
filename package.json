@@ -63,7 +63,8 @@
     "debug": "4.1.1",
     "download-tarball": "2.0.0",
     "execa": "5.0.0",
-    "js-yaml": "4.1.0"
+    "js-yaml": "4.1.0",
+    "wait-for-localhost": "3.3.0"
   },
   "devDependencies": {
     "@babel/cli": "7.14.3",
