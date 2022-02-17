@@ -67,8 +67,8 @@
     "wait-for-localhost": "3.3.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.14.3",
-    "@babel/core": "7.14.3",
+    "@babel/cli": "7.17.3",
+    "@babel/core": "7.17.5",
     "@shelf/babel-config": "0.1.2",
     "@shelf/eslint-config": "1.1.0",
     "@shelf/prettier-config": "1.0.0",
