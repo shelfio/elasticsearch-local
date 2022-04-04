@@ -13,20 +13,20 @@ import cwd from 'cwd';
 const debug = getDebug('elasticsearch-local');
 const FILEPATH_PREFIX = `${cwd()}/node_modules/.cache/@shelf/elasticsearch-local`;
 
-interface StartESOptions {
+type StartESOptions = {
   // Choose ES proper version at https://www.elastic.co/downloads/past-releases#elasticsearch
   esVersion: string;
   clusterName?: string;
   nodeName?: string;
   port?: number;
   indexes?: ESIndex[];
-}
+};
 
-interface ESIndex {
+type ESIndex = {
   name: string;
   // Body, which will be sent ot create index, see https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-create-index.html#indices-create-index
   body: Record<string, unknown>;
-}
+};
 
 let spawnedProcess: execa.ExecaChildProcess;
 
@@ -164,10 +164,10 @@ async function isExistingFile(filepath: string): Promise<boolean> {
   }
 }
 
-interface ESError {
+type ESError = {
   reason: string;
   type: string;
-}
+};
 
 function getESError(esResponse: Buffer): ESError | undefined {
   return JSON.parse(esResponse.toString()).error;
