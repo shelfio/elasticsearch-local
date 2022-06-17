@@ -1,4 +1,4 @@
-jest.setTimeout(100000);
+jest.setTimeout(10 * 60 * 1000);
 
 import {execSync} from 'child_process';
 import {start, stop} from '.';
