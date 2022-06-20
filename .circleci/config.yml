@@ -25,10 +25,9 @@ jobs:
       name: node/default
       tag: << pipeline.parameters.node_version >>
     working_directory: ~/repo
-    resource_class: large
     steps:
       - checkout
       - install_deps
-      - run: DEBUG=* yarn test
+      - run: yarn test
       - run: yarn type-check
       - run: yarn lint:ci
