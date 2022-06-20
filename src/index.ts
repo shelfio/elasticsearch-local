@@ -73,7 +73,6 @@ export async function start(options: StartESOptions): Promise<void> {
     [
       `-p`,
       `${FILEPATH_PREFIX}/elasticsearch-${esVersion}/es-pid`,
-      `-Expack.security.enabled=false`,
       `-Ecluster.name=${clusterName}`,
       `-Enode.name=${nodeName}`,
       `-Ehttp.port=${port}`,
@@ -213,6 +212,9 @@ function upsertYAMLConfig(ymlConfigPath: string): void {
     yaml.dump({
       ...parsedYaml,
       xpack: {
+        security: {
+          enabled: false,
+        },
         ml: {
           enabled: false,
         },
