@@ -71,7 +71,6 @@ export async function start(options: StartESOptions): Promise<void> {
   spawnedProcess = execa(
     esBinaryFilepath,
     [
-      `-d`,
       `-p`,
       `${FILEPATH_PREFIX}/elasticsearch-${esVersion}/es-pid`,
       `-Ecluster.name=${clusterName}`,
@@ -213,6 +212,9 @@ function upsertYAMLConfig(ymlConfigPath: string): void {
     yaml.dump({
       ...parsedYaml,
       xpack: {
+        security: {
+          enabled: false,
+        },
         ml: {
           enabled: false,
         },

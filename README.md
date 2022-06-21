@@ -16,7 +16,7 @@ $ yarn add @shelf/elasticsearch-local --dev
 import {start} from '@shelf/elasticsearch-local';
 
 await start({
-  esVersion: '7.3.0',
+  esVersion: '8.2.2',
   port: 9000, // optional
   clusterName: 'test', // optional
   nodeName: 'test', // optional
@@ -47,7 +47,7 @@ await start({
 ```js
 import {stop} from '@shelf/elasticsearch-local';
 
-await stop();
+stop();
 ```
 
 ## Publish
