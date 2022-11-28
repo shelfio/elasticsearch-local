@@ -95,7 +95,7 @@ export async function start(options: StartESOptions): Promise<void> {
 
 async function createIndices(esURL: string, indexes: {name: string; body: any}[]): Promise<void> {
   await Promise.all(
-    indexes.map(async ({name, body}) => {
+    indexes.map(({name, body}) => {
       const result = execSync(
         `curl -X PUT "${esURL}${name}" -H 'Content-Type: application/json' -s -d '${JSON.stringify(
           body
