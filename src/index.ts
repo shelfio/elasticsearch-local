@@ -1,13 +1,13 @@
-import getDebug from 'debug';
 import {execSync} from 'child_process';
 import {promisify} from 'util';
 import {platform} from 'os';
+import {access, constants, readFileSync, writeFileSync} from 'fs';
+import getDebug from 'debug';
 import execa from 'execa';
 import yaml from 'js-yaml';
 import waitForLocalhost from 'wait-for-localhost';
 // @ts-ignore
 import download from 'download-tarball';
-import {access, constants, readFileSync, writeFileSync} from 'fs';
 import cwd from 'cwd';
 
 const debug = getDebug('elasticsearch-local');
