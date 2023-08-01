@@ -93,7 +93,10 @@ export async function start(options: StartESOptions): Promise<void> {
   process.env.ES_INDEXES_NAMES = JSON.stringify(indexes.map(({name}) => name));
 }
 
-async function createIndices(esURL: string, indexes: {name: string; body: any}[]): Promise<void> {
+async function createIndices(
+  esURL: string,
+  indexes: {name: string; body: Record<string, unknown>}[]
+): Promise<void> {
   await Promise.all(
     indexes.map(({name, body}) => {
       const result = execSync(
