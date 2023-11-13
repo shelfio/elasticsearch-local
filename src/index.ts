@@ -3,12 +3,13 @@ import {promisify} from 'util';
 import {platform} from 'os';
 import {access, constants, readFileSync, writeFileSync} from 'fs';
 import getDebug from 'debug';
-import execa from 'execa';
+import {execa} from 'execa';
 import yaml from 'js-yaml';
 import waitForLocalhost from 'wait-for-localhost';
 // @ts-ignore
 import download from 'download-tarball';
 import cwd from 'cwd';
+import type {ExecaChildProcess} from 'execa';
 
 const debug = getDebug('elasticsearch-local');
 const FILEPATH_PREFIX = `${cwd()}/node_modules/.cache/@shelf/elasticsearch-local`;
@@ -28,7 +29,7 @@ type ESIndex = {
   body: Record<string, unknown>;
 };
 
-let spawnedProcess: execa.ExecaChildProcess;
+let spawnedProcess: ExecaChildProcess;
 
 export async function start(options: StartESOptions): Promise<void> {
   const {

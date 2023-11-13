@@ -28,7 +28,7 @@
   "types": "./lib/index.d.ts",
   "scripts": {
     "build": "rm -rf lib/ && yarn build:types && yarn build:code",
-    "build:code": "babel src --out-dir lib --ignore '**/*.test.ts' --extensions '.ts' && find ./lib -name '*.test.d.ts' -delete",
+    "build:code": "node esbuild.js",
     "build:types": "tsc --emitDeclarationOnly --declaration --isolatedModules false --declarationDir lib",
     "coverage": "yarn test --coverage",
     "lint": "eslint . --ext .js,.ts,.json --fix",
@@ -46,11 +46,10 @@
       "eslint --fix"
     ]
   },
-  "babel": {
-    "extends": "@shelf/babel-config/backend"
-  },
   "prettier": "@shelf/prettier-config",
   "dependencies": {
+    "@swc/core": "^1.3.96",
+    "@swc/jest": "^0.2.29",
     "cwd": "0.10.0",
     "debug": "4.3.4",
     "download-tarball": "2.0.0",
@@ -59,9 +58,6 @@
     "wait-for-localhost": "3.3.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.23.0",
-    "@babel/core": "7.23.2",
-    "@shelf/babel-config": "2.0.2",
     "@shelf/eslint-config": "3.10.0",
     "@shelf/prettier-config": "1.0.0",
     "@shelf/tsconfig": "0.0.11",
@@ -70,7 +66,7 @@
     "@types/jest": "29.5.8",
     "@types/js-yaml": "4.0.8",
     "@types/node": "18",
-    "babel-jest": "29.7.0",
+    "esbuild": "0.19.5",
     "eslint": "8.52.0",
     "husky": "8.0.3",
     "jest": "29.7.0",
