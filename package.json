@@ -31,8 +31,8 @@
     "build:code": "node esbuild.js",
     "build:types": "tsc --emitDeclarationOnly --declaration --isolatedModules false --declarationDir lib",
     "coverage": "yarn test --coverage",
-    "lint": "eslint . --ext .js,.ts,.json --fix",
-    "lint:ci": "eslint . --ext .js,.ts,.json",
+    "lint": "yarn lint:ci --fix",
+    "lint:ci": "eslint . --quiet",
     "prepack": "yarn build",
     "test": "jest src --runInBand",
     "type-check": "tsc --noEmit",
@@ -56,7 +56,7 @@
     "wait-for-localhost": "3.3.0"
   },
   "devDependencies": {
-    "@shelf/eslint-config": "3.15.1",
+    "@shelf/eslint-config": "4.2.1",
     "@shelf/prettier-config": "1.0.0",
     "@shelf/tsconfig": "0.1.0",
     "@swc/core": "1.7.11",
@@ -67,7 +67,7 @@
     "@types/js-yaml": "4.0.9",
     "@types/node": "18",
     "esbuild": "0.23.1",
-    "eslint": "8.57.1",
+    "eslint": "9.17.0",
     "husky": "9.1.4",
     "jest": "29.7.0",
     "lint-staged": "15.2.11",
