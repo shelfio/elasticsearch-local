@@ -65,7 +65,7 @@
     "@types/debug": "4.1.12",
     "@types/jest": "29.5.14",
     "@types/js-yaml": "4.0.9",
-    "@types/node": "18",
+    "@types/node": "22",
     "esbuild": "0.23.1",
     "eslint": "9.19.0",
     "husky": "9.1.4",
@@ -75,7 +75,7 @@
     "typescript": "5.7.3"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "publishConfig": {
     "access": "public"
