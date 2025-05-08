@@ -51,7 +51,7 @@
     "cwd": "0.10.0",
     "debug": "4.3.6",
     "download-tarball": "2.0.0",
-    "execa": "8.0.1",
+    "execa": "9.5.3",
     "js-yaml": "4.1.0",
     "wait-for-localhost": "3.3.0"
   },
