@@ -56,7 +56,7 @@
     "wait-for-localhost": "3.3.0"
   },
   "devDependencies": {
-    "@shelf/eslint-config": "4.2.1",
+    "@shelf/eslint-config": "7.1.0",
     "@shelf/prettier-config": "1.0.0",
     "@shelf/tsconfig": "0.1.0",
     "@swc/core": "1.15.21",
@@ -67,7 +67,7 @@
     "@types/js-yaml": "4.0.9",
     "@types/node": "22",
     "esbuild": "0.23.1",
-    "eslint": "9.39.4",
+    "eslint": "10.8.0",
     "husky": "9.1.4",
     "jest": "30.3.0",
     "lint-staged": "15.5.2",
