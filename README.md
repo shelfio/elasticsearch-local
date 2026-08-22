@@ -1,5 +1,9 @@
 # elasticsearch-local [![CircleCI](https://circleci.com/gh/shelfio/elasticsearch-local/tree/master.svg?style=svg)](https://circleci.com/gh/shelfio/elasticsearch-local/tree/master) ![](https://img.shields.io/badge/code_style-prettier-ff69b4.svg) [![npm (scoped)](https://img.shields.io/npm/v/@shelf/elasticsearch-local.svg)](https://www.npmjs.com/package/@shelf/elasticsearch-local)
 
+> **Archived:** This project is no longer maintained. The local Elasticsearch runtime now lives
+> in [jest-elasticsearch](https://github.com/shelfio/jest-elasticsearch). Existing npm releases
+> remain available.
+
 > Run any version of ElasticSearch locally
 
 ## Usage
